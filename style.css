@@ -1,0 +1,29 @@
+/* ... gaya sebelumnya tetap ... */
+
+.btn-group {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.btn-group button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: none;
+  background-color: #2ecc71;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-group button:hover {
+  background-color: #27ae60;
+}
+
+#strukArea {
+  background: white;
+  padding: 15px;
+  margin-top: 30px;
+  border: 1px solid #ccc;
+  width: 300px;
+}

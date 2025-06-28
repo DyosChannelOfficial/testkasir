@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kasir QiyaAzka</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Thermal printer-friendly styles */
+    @media print {
+      body { font-size: 12px; font-family: monospace; }
+      button, input, label, h1, h3 { display: none !important; }
+      #strukArea { border: none; }
+    }
+  </style>
+  <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#4CAF50" />
+
+</head>
+<body>
+  <h1>Kasir Toko QiyaAzka</h1>
+
+  <label>Barcode: <input type="text" id="barcode" placeholder="cth: mie123" /></label>
+  <button onclick="tambahBarang()">Tambah</button>
+
+  <br><br>
+  <label>Nama Kasir: <input type="text" id="namaKasir" /></label><br>
+  <label>Nama Pelanggan: <input type="text" id="namaPelanggan" /></label><br>
+  <label>Uang Pelanggan: <input type="number" id="uangPelanggan" /></label><br>
+  <label>
+    Pajak:
+    <select id="pajakOpsi">
+      <option value="0">Tanpa Pajak</option>
+      <option value="10">Pajak 10%</option>
+    </select>
+  </label>
+
+  <h3>Daftar Belanja</h3>
+  <table id="daftarBarang" border="1">
+    <thead>
+      <tr>
+        <th>Nama</th><th>Harga</th><th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Total: <span id="totalHarga">Rp. 0</span></h3>
+
+  <button onclick="cetakStruk()">Cetak Struk</button>
+  <button onclick="resetTransaksi()">Reset</button>
+  <button onclick="salinStruk()">Salin Struk</button>
+
+  <div id="strukArea" style="display:none; margin-top:20px;">
+    <pre id="strukTeks"></pre>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log("Service Worker Registered"));
+  }
+</script>
+
+</body>
+</html>

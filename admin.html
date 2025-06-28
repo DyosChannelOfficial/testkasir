@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Barang | QiyaAzka</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { margin: 4px 2px; padding: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <h1>Halaman Admin QiyaAzka</h1>
+
+  <form id="formBarang" onsubmit="return tambahBarang()">
+    <input type="text" id="kode" placeholder="(Opsional) Barcode / Kode Barang" />
+    <input type="text" id="nama" placeholder="Nama Barang" required />
+    <input type="number" id="hargaBeli" placeholder="Harga Beli" required />
+    <input type="number" id="hargaJual" placeholder="Harga Jual" required />
+    <input type="number" id="stok" placeholder="Stok" required />
+    <button type="submit">Tambah Barang</button>
+  </form>
+
+  <h2>Daftar Barang</h2>
+  <table id="tabelBarang">
+    <thead>
+      <tr>
+        <th>Kode</th>
+        <th>Nama</th>
+        <th>Beli</th>
+        <th>Jual</th>
+        <th>Stok</th>
+        <th>Sisa</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="tabelBarangBody"></tbody>
+  </table>
+
+  <script>
+    // Ambil data dari localStorage atau buat kosong jika belum ada
+    let barangDatabase = JSON.parse(localStorage.getItem("barangDatabase")) || {};
+
+    function simpanDatabase() {
+      localStorage.setItem("barangDatabase", JSON.stringify(barangDatabase));
+    }
+
+    function tambahBarang() {
+      const kodeInput = document.getElementById("kode").value.trim().toLowerCase();
+      const namaInput = document.getElementById("nama").value.trim();
+      const hargaBeli = parseInt(document.getElementById("hargaBeli").value);
+      const hargaJual = parseInt(document.getElementById("hargaJual").value);
+      const stok = parseInt(document.getElementById("stok").value);
+
+      if (!namaInput || isNaN(hargaBeli) || isNaN(hargaJual) || isNaN(stok)) {
+        alert("Isi semua kolom dengan benar.");
+        return false;
+      }
+
+      const kode = kodeInput || namaInput.toLowerCase().replace(/\s+/g, '-');
+
+      barangDatabase[kode] = {
+        nama: namaInput,
+        hargaBeli: hargaBeli,
+        harga: hargaJual,
+        stokAwal: stok,
+        sisa: stok
+      };
+
+      simpanDatabase();
+      renderTabel();
+      document.getElementById("formBarang").reset();
+      return false; // mencegah reload form
+    }
+
+    function hapusBarang(kode) {
+      if (confirm(`Yakin ingin menghapus barang "${barangDatabase[kode].nama}"?`)) {
+        delete barangDatabase[kode];
+        simpanDatabase();
+        renderTabel();
+      }
+    }
+
+    function renderTabel() {
+  const tbody = document.getElementById("tabelBarangBody");
+  tbody.innerHTML = "";
+
+  for (const kode in barangDatabase) {
+    const b = barangDatabase[kode];
+
+    // Skip barang yang tidak lengkap (misal karena data rusak di localStorage)
+    if (!b || typeof b !== "object" || b.hargaBeli === undefined || b.harga === undefined) {
+      continue;
+    }
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${kode}</td>
+        <td>${b.nama}</td>
+        <td>Rp ${b.hargaBeli.toLocaleString('id-ID')}</td>
+        <td>Rp ${b.harga.toLocaleString('id-ID')}</td>
+        <td>${b.stokAwal}</td>
+        <td>${b.sisa}</td>
+        <td><button onclick="hapusBarang('${kode}')">Hapus</button></td>
+      </tr>
+    `;
+  }
+}
+
+    // Tampilkan data saat halaman dibuka
+    renderTabel();
+  </script>
+</body>
+</html>

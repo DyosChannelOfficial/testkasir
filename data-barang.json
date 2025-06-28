@@ -1,0 +1,14 @@
+{
+  "minyak 5l": {
+    "nama": "minyak 5L",
+    "harga": 98000
+  },
+  "surya-12": {
+    "nama": "Surya 12",
+    "harga": 28000
+  },
+  "surya-16": {
+    "nama": "surya 16",
+    "harga": 32000
+  }
+}
